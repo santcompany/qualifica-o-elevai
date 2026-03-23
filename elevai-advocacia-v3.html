@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ElevAI Co — Método Vértice para Advocacia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F2EFE8;--cream2:#E8E4DA;--cream3:#D9D4C7;
+  --ink:#12120E;--ink2:#1C1C16;--ink3:#242418;
+  --emerald:#1A5C45;--emerald2:#226B52;--emerald3:#2D8A68;
+  --gold:#B8924A;--gold2:#D4A85A;--gold3:#E8C070;
+  --muted:rgba(18,18,14,.48);--muted2:rgba(18,18,14,.22);
+  --border:rgba(18,18,14,.1);--border2:rgba(18,18,14,.06);
+  --e-border:rgba(26,92,69,.18);
+  --inv-muted:rgba(242,239,232,.45);--inv-muted2:rgba(242,239,232,.2);
+  --inv-border:rgba(242,239,232,.07);
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:.02;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;height:70px;padding:0 64px;
+display:flex;align-items:center;justify-content:space-between;
+transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+nav.scrolled{background:rgba(242,239,232,.97);backdrop-filter:blur(20px);border-bottom-color:var(--border)}
+.logo{font-family:'Syne',sans-serif;font-size:19px;font-weight:800;letter-spacing:-.5px;
+text-decoration:none;color:var(--ink);display:flex;align-items:baseline;gap:3px}
+.logo .ai{color:var(--emerald)}
+.logo .co{font-size:9px;font-weight:500;letter-spacing:3.5px;text-transform:uppercase;color:var(--muted);margin-left:2px}
+.nav-back{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;
+color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .2s}
+.nav-back::before{content:'←'}.nav-back:hover{color:var(--ink)}
+.nav-cta{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+color:var(--cream);background:var(--emerald);border:none;padding:11px 26px;cursor:pointer;
+text-decoration:none;transition:background .25s,transform .2s;display:inline-block}
+.nav-cta:hover{background:var(--emerald2);transform:translateY(-1px)}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;padding:120px 64px 100px;
+position:relative;overflow:hidden;
+display:grid;grid-template-columns:1fr 420px;gap:72px;align-items:center}
+.hero-vline{position:absolute;top:0;left:64px;width:1px;height:100%;
+background:linear-gradient(to bottom,transparent,var(--border) 15%,var(--border) 85%,transparent);pointer-events:none}
+.hero-wm{position:absolute;right:-30px;bottom:-70px;font-family:'Syne',sans-serif;
+font-size:clamp(100px,14vw,200px);font-weight:800;color:rgba(18,18,14,.025);
+line-height:1;pointer-events:none;letter-spacing:-8px;user-select:none}
+
+.hero-left{position:relative;z-index:2}
+
+.hero-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:28px;
+opacity:0;animation:fadeUp .7s ease .1s forwards}
+.h-bar{width:36px;height:1px;background:var(--emerald)}
+.h-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--emerald)}
+
+.metodo-badge{display:inline-flex;align-items:center;gap:12px;
+border:1px solid var(--e-border);padding:9px 16px;margin-bottom:32px;background:rgba(26,92,69,.04);
+opacity:0;animation:fadeUp .7s ease .15s forwards}
+.mb-l{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted2)}
+.mb-sep{width:1px;height:12px;background:var(--border)}
+.mb-n{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--emerald);letter-spacing:-.3px}
+
+.hero-h1{font-family:'Syne',sans-serif;font-size:clamp(28px,3.6vw,52px);font-weight:800;
+line-height:1.08;letter-spacing:-2px;margin-bottom:24px;
+opacity:0;animation:fadeUp .7s ease .2s forwards}
+.hero-h1 em{font-style:normal;color:var(--emerald)}
+.hero-h1 .out{-webkit-text-stroke:1.5px var(--ink);color:transparent}
+
+.hero-sub{font-size:15px;font-weight:300;line-height:1.85;color:var(--muted);
+max-width:480px;margin-bottom:40px;opacity:0;animation:fadeUp .7s ease .3s forwards}
+.hero-sub strong{color:var(--ink);font-weight:500}
+
+.hero-ctas{display:flex;align-items:center;gap:24px;flex-wrap:wrap;
+opacity:0;animation:fadeUp .7s ease .4s forwards}
+.btn-primary{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2.5px;
+text-transform:uppercase;color:var(--cream);background:var(--emerald);border:none;
+padding:17px 40px;cursor:pointer;text-decoration:none;
+transition:background .25s,transform .2s,box-shadow .25s;display:inline-block}
+.btn-primary:hover{background:var(--emerald2);transform:translateY(-2px);box-shadow:0 14px 40px rgba(26,92,69,.28)}
+.hero-note{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted2)}
+
+/* ─── PAINEL INTERATIVO HERO ─── */
+.hero-right{position:relative;z-index:2;opacity:0;animation:fadeUp .7s ease .5s forwards}
+
+.opp-panel{
+  position:relative;overflow:hidden;
+  background:var(--ink2);
+  border:1px solid rgba(255,255,255,.07);
+}
+
+/* linha topo esmeralda sólida */
+.opp-panel::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--emerald3),var(--gold2),transparent);
+}
+
+/* número grande decorativo */
+.opp-panel::after{
+  content:'R$';position:absolute;
+  right:-12px;bottom:-24px;
+  font-family:'Syne',sans-serif;font-size:120px;font-weight:800;
+  color:rgba(255,255,255,.025);line-height:1;
+  pointer-events:none;letter-spacing:-4px;user-select:none;
+}
+
+/* cabeçalho do painel */
+.opp-head{
+  padding:16px 24px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.opp-title{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(242,239,232,.28);
+}
+.opp-live{
+  display:flex;align-items:center;gap:7px;
+  font-family:'DM Mono',monospace;font-size:9px;
+  color:var(--emerald3);
+}
+.opp-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--emerald3);
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* display principal — número grande */
+.opp-display{
+  padding:32px 28px 24px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  position:relative;
+}
+.opp-sublabel{
+  font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(242,239,232,.28);margin-bottom:10px;display:block;
+}
+.opp-value{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,4.5vw,58px);
+  font-weight:800;color:var(--cream);
+  letter-spacing:-2.5px;line-height:1;
+  transition:color .3s;
+}
+.opp-value.active{color:var(--gold2);}
+.opp-caption{
+  font-size:12px;font-weight:300;line-height:1.6;
+  color:rgba(242,239,232,.35);margin-top:10px;
+  font-family:'DM Sans',sans-serif;
+}
+
+/* sliders — área de inputs */
+.opp-inputs{
+  padding:22px 24px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;flex-direction:column;gap:20px;
+}
+.opp-field{}
+.opp-field-row{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin-bottom:10px;
+}
+.opp-field-label{
+  font-family:'DM Mono',monospace;font-size:8px;
+  letter-spacing:2px;text-transform:uppercase;
+  color:rgba(242,239,232,.32);
+}
+.opp-field-val{
+  font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+  color:rgba(242,239,232,.85);letter-spacing:-.5px;
+}
+
+/* trilha do slider */
+.opp-track{
+  position:relative;height:2px;
+  background:rgba(255,255,255,.08);
+  margin-bottom:2px;
+}
+.opp-fill{
+  position:absolute;top:0;left:0;height:100%;
+  background:var(--emerald);
+  transition:width .1s;pointer-events:none;
+}
+input[type=range].opp-range{
+  position:absolute;top:-6px;left:0;
+  width:100%;height:14px;
+  -webkit-appearance:none;appearance:none;
+  background:transparent;outline:none;cursor:pointer;
+}
+input[type=range].opp-range::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:16px;height:16px;
+  background:var(--cream);
+  border:2px solid var(--emerald);
+  border-radius:50%;cursor:pointer;
+  transition:transform .15s,border-color .2s;
+  box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+input[type=range].opp-range::-webkit-slider-thumb:hover{
+  transform:scale(1.25);border-color:var(--emerald3);
+}
+input[type=range].opp-range::-moz-range-thumb{
+  width:16px;height:16px;
+  background:var(--cream);border:2px solid var(--emerald);
+  border-radius:50%;cursor:pointer;border:none;
+}
+
+/* breakdown — linha a linha */
+.opp-breakdown{padding:18px 24px 20px;}
+.opp-brow{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);
+}
+.opp-brow:last-child{border-bottom:none}
+.obl{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(242,239,232,.28);
+}
+.obv{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  color:rgba(242,239,232,.6);letter-spacing:-.3px;
+}
+.obv.em{
+  color:var(--gold2);
+  font-size:16px;
+}
+
+/* ─── UTILIDADES SEÇÕES ─── */
+.sec-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.st-line{width:32px;height:1px;background:currentColor}
+.sec-h2{font-family:'Syne',sans-serif;font-size:clamp(26px,3.8vw,54px);font-weight:800;
+line-height:1.07;letter-spacing:-2px;margin-bottom:56px;max-width:640px}
+.sec-h2 em{font-style:normal}
+.sec-wm{position:absolute;right:-10px;top:-30px;font-family:'Syne',sans-serif;
+font-size:clamp(100px,13vw,190px);font-weight:800;color:rgba(255,255,255,.022);
+line-height:1;pointer-events:none;letter-spacing:-6px;user-select:none}
+.sec-wm.dark{color:rgba(18,18,14,.025)}
+
+/* ─── PROBLEMA ─── */
+.problema{padding:120px 64px;background:var(--ink2);position:relative;overflow:hidden}
+.problema::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;
+background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)}
+.prob-item{background:var(--ink2);padding:44px 40px;position:relative;overflow:hidden;
+transition:background .3s}
+.prob-item:hover{background:var(--ink3)}
+.prob-item::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+background:var(--gold2);transform:scaleY(0);transform-origin:bottom;
+transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.prob-item:hover::after{transform:scaleY(1)}
+.pi-n{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;
+color:rgba(242,239,232,.2);margin-bottom:20px}
+.pi-t{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;
+color:rgba(242,239,232,.85);letter-spacing:-.4px;margin-bottom:14px;line-height:1.25}
+.pi-d{font-size:13px;font-weight:300;line-height:1.85;color:rgba(242,239,232,.4)}
+
+.prob-statement{margin-top:64px;padding:48px;
+background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.ps-text{font-family:'Syne',sans-serif;font-size:clamp(20px,2.8vw,32px);
+font-weight:700;letter-spacing:-1px;line-height:1.35;color:rgba(242,239,232,.9);max-width:560px}
+.ps-text em{font-style:normal;color:var(--gold2)}
+.ps-aside{flex-shrink:0;text-align:right}
+.ps-val{font-family:'Syne',sans-serif;font-size:clamp(44px,6vw,72px);
+font-weight:800;letter-spacing:-3px;color:var(--gold2);line-height:1}
+.ps-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+text-transform:uppercase;color:rgba(242,239,232,.25);margin-top:4px}
+
+/* ─── MÉTODO ─── */
+.metodo{padding:120px 64px;background:var(--cream);position:relative;overflow:hidden}
+.metodo-inner{max-width:1100px;margin:0 auto}
+.metodo-intro{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:80px}
+.metodo-p{font-size:15px;font-weight:300;line-height:1.9;color:var(--muted)}
+.metodo-p strong{color:var(--ink);font-weight:500}
+
+.pilares{display:grid;grid-template-columns:repeat(4,1fr);
+gap:1px;background:var(--border);border:1px solid var(--border)}
+.pilar{background:var(--cream);padding:40px 28px;position:relative;overflow:hidden;transition:background .3s}
+.pilar:hover{background:var(--cream2)}
+.pilar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+background:var(--emerald);transform:scaleX(0);transform-origin:left;
+transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.pilar:hover::after{transform:scaleX(1)}
+.pilar-n{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--muted2);margin-bottom:18px}
+.pilar-icon{font-size:22px;margin-bottom:14px;display:block;filter:grayscale(1);transition:filter .3s,transform .3s}
+.pilar:hover .pilar-icon{filter:grayscale(0);transform:scale(1.08)}
+.pilar-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+letter-spacing:-.3px;margin-bottom:10px;line-height:1.3}
+.pilar-desc{font-size:12px;font-weight:300;line-height:1.75;color:var(--muted)}
+
+/* ─── COMO FUNCIONA ─── */
+.como{padding:120px 64px;background:var(--ink);position:relative;overflow:hidden}
+.como::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.como-inner{max-width:1100px;margin:0 auto}
+.como-steps{display:grid;grid-template-columns:repeat(4,1fr);
+gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);margin-top:64px}
+.cs{background:var(--ink);padding:40px 32px;position:relative;overflow:hidden}
+.cs-big{position:absolute;right:-8px;bottom:-16px;font-family:'Syne',sans-serif;
+font-size:90px;font-weight:800;color:rgba(255,255,255,.03);
+line-height:1;pointer-events:none;letter-spacing:-4px}
+.cs-step{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;
+text-transform:uppercase;color:var(--gold2);margin-bottom:18px;display:block}
+.cs-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;
+color:rgba(242,239,232,.9);letter-spacing:-.4px;margin-bottom:12px;line-height:1.3}
+.cs-desc{font-size:12px;font-weight:300;line-height:1.8;
+color:rgba(242,239,232,.38);position:relative;z-index:1}
+
+/* ─── POSSIBILIDADES ─── */
+.possib{padding:120px 64px;background:var(--cream2);position:relative;overflow:hidden}
+.possib::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.possib-inner{max-width:1100px;margin:0 auto}
+.possib-intro{max-width:640px;margin-bottom:72px}
+.possib-note{font-size:14px;font-weight:300;line-height:1.85;color:var(--muted);
+margin-top:16px;padding:16px 20px;border-left:2px solid var(--emerald);
+background:rgba(26,92,69,.04)}
+.possib-note strong{color:var(--ink);font-weight:500}
+
+.possib-acc-list{border:1px solid var(--border)}
+.possib-acc{border-bottom:1px solid var(--border)}
+.possib-acc:last-child{border-bottom:none}
+.pa-head{display:flex;align-items:center;gap:18px;padding:24px 32px;
+cursor:pointer;transition:background .2s;user-select:none}
+.pa-head:hover{background:rgba(18,18,14,.03)}
+.pa-n{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted2);flex-shrink:0;width:24px}
+.pa-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.3px;flex:1}
+.pa-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+color:var(--emerald);border:1px solid var(--e-border);padding:4px 10px;flex-shrink:0;white-space:nowrap}
+.pa-arr{width:22px;height:22px;border:1px solid var(--border);
+display:flex;align-items:center;justify-content:center;flex-shrink:0;
+font-size:14px;color:var(--muted2);
+transition:transform .35s cubic-bezier(.25,.46,.45,.94),border-color .2s,color .2s}
+.possib-acc.open .pa-arr{transform:rotate(45deg);border-color:var(--emerald);color:var(--emerald)}
+.pa-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.25,.46,.45,.94)}
+.possib-acc.open .pa-body{max-height:300px}
+.pa-inner{padding:0 32px 28px 74px}
+.pa-desc{font-size:14px;font-weight:300;line-height:1.85;color:var(--muted);margin-bottom:16px}
+.pa-resultado{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;
+text-transform:uppercase;color:var(--emerald);display:flex;align-items:center;gap:8px}
+.pa-resultado::before{content:'→'}
+
+/* ─── QUIZ ─── */
+.quiz-sec{padding:120px 64px;background:var(--ink2);position:relative;overflow:hidden}
+.quiz-sec::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.quiz-inner{max-width:1100px;margin:0 auto;
+display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+.quiz-left{}
+.quiz-left-sub{font-size:15px;font-weight:300;line-height:1.9;
+color:rgba(242,239,232,.4);max-width:400px;margin-top:4px}
+
+.quiz-wrap{background:var(--ink3);border:1px solid rgba(255,255,255,.07);position:relative;overflow:hidden}
+.quiz-wrap::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+background:linear-gradient(90deg,var(--emerald),var(--gold))}
+.qw-head{padding:20px 28px;border-bottom:1px solid rgba(255,255,255,.06);
+display:flex;align-items:center;justify-content:space-between}
+.qw-title{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--inv-muted2)}
+.qw-step{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--gold)}
+.qw-prog{height:2px;background:rgba(255,255,255,.06)}
+.qw-bar{height:100%;background:linear-gradient(90deg,var(--emerald),var(--gold));
+width:0%;transition:width .5s cubic-bezier(.25,.46,.45,.94)}
+.qw-body{padding:28px}
+.qw-q{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+color:rgba(242,239,232,.95);letter-spacing:-.3px;margin-bottom:22px;line-height:1.45}
+.qw-opts{display:flex;flex-direction:column;gap:8px}
+.qw-opt{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+padding:13px 16px;cursor:pointer;text-align:left;
+font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;
+color:rgba(242,239,232,.5);transition:all .2s}
+.qw-opt:hover{border-color:rgba(26,92,69,.5);color:rgba(242,239,232,.85);background:rgba(26,92,69,.07)}
+.qw-opt.sel{border-color:var(--emerald);color:rgba(242,239,232,.95);background:rgba(26,92,69,.15)}
+.qw-foot{padding:0 28px 24px;display:flex;align-items:center;justify-content:space-between}
+.btn-qn{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;
+text-transform:uppercase;color:var(--cream);background:var(--emerald);
+border:none;padding:12px 28px;cursor:pointer;
+transition:background .2s,transform .2s;opacity:.3;pointer-events:none}
+.btn-qn.on{opacity:1;pointer-events:auto}
+.btn-qn.on:hover{background:var(--emerald2);transform:translateY(-1px)}
+.btn-qb{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+color:rgba(242,239,232,.25);background:none;border:none;cursor:pointer;transition:color .2s}
+.btn-qb::before{content:'← '}.btn-qb:hover{color:rgba(242,239,232,.5)}
+
+/* resultado quiz */
+.qw-result{padding:28px;display:none}
+.qr-header{display:flex;align-items:center;gap:18px;
+padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid rgba(255,255,255,.07)}
+.qr-ring{width:66px;height:66px;border-radius:50%;
+border:1.5px solid var(--emerald);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.qr-sv{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--cream);line-height:1;text-align:center}
+.qr-sl{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;color:var(--inv-muted2);margin-top:2px;text-align:center}
+.qr-h{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+color:rgba(242,239,232,.9);letter-spacing:-.3px;line-height:1.4;margin-bottom:5px}
+.qr-s{font-size:12px;font-weight:300;line-height:1.7;color:rgba(242,239,232,.38)}
+.qr-recs{display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
+.qr-rec{display:flex;gap:10px;padding:11px 14px;
+background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+.qr-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:5px}
+.qr-txt{font-size:12px;font-weight:300;line-height:1.65;color:rgba(242,239,232,.5)}
+.qr-txt strong{color:rgba(242,239,232,.88);font-weight:500}
+.btn-qcta{width:100%;font-family:'Syne',sans-serif;font-size:10px;font-weight:800;
+letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--emerald);
+border:none;padding:16px;cursor:pointer;text-decoration:none;
+transition:background .25s;display:block;text-align:center}
+.btn-qcta:hover{background:var(--emerald2)}
+.btn-qreset{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+color:rgba(242,239,232,.2);background:none;border:none;cursor:pointer;
+transition:color .2s;margin-top:10px;display:block;width:100%;text-align:center}
+.btn-qreset:hover{color:rgba(242,239,232,.45)}
+
+/* ─── ISCA — BIBLIOTECA ─── */
+.isca{padding:120px 64px;background:var(--cream);position:relative;overflow:hidden}
+.isca::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+background:linear-gradient(90deg,transparent,var(--border),transparent)}
+.isca-inner-full{max-width:1100px;margin:0 auto}
+
+.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;
+background:var(--border);border:1px solid var(--border)}
+
+.mat-card{background:var(--cream);padding:36px 28px;position:relative;
+display:flex;flex-direction:column;gap:16px;transition:background .3s}
+.mat-card.unlocked:hover{background:var(--cream2)}
+.mat-card.unlocked::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+background:var(--emerald);transform:scaleX(0);transform-origin:left;
+transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.mat-card.unlocked:hover::after{transform:scaleX(1)}
+.mat-card.locked{background:var(--cream2);cursor:not-allowed}
+
+.mat-card-top{display:flex;align-items:center;justify-content:space-between}
+.mat-num{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted2)}
+.mat-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;
+padding:4px 10px;border:1px solid}
+.mat-badge.free{color:var(--emerald);border-color:var(--e-border);background:rgba(26,92,69,.05)}
+.mat-badge.locked-badge{color:var(--muted2);border-color:var(--border)}
+
+.mat-icon{font-size:24px;display:block}
+.mat-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;
+letter-spacing:-.3px;line-height:1.35;color:var(--ink)}
+.mat-desc{font-size:12px;font-weight:300;line-height:1.75;color:var(--muted);flex:1}
+
+.mat-form{margin-top:auto}
+.mat-input-row{display:flex}
+.mat-input{flex:1;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:300;
+color:var(--ink);background:var(--cream);border:1px solid var(--border);
+border-right:none;padding:12px 14px;outline:none;transition:border-color .2s;min-width:0}
+.mat-input::placeholder{color:var(--muted2)}
+.mat-input:focus{border-color:var(--emerald)}
+.btn-mat{font-family:'Syne',sans-serif;font-size:9px;font-weight:800;letter-spacing:2px;
+text-transform:uppercase;color:var(--cream);background:var(--emerald);
+border:none;padding:12px 16px;cursor:pointer;transition:background .2s;white-space:nowrap;flex-shrink:0}
+.btn-mat:hover{background:var(--emerald2)}
+.mat-fine{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;
+text-transform:uppercase;color:var(--muted2);margin-top:8px;display:block}
+
+.mat-lock-info{margin-top:auto;padding:12px 14px;
+background:rgba(18,18,14,.04);border:1px solid var(--border2);
+display:flex;align-items:center;gap:8px}
+.mat-lock-text{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+text-transform:uppercase;color:var(--muted2)}
+
+/* estado desbloqueado */
+.mat-card.just-unlocked{background:rgba(26,92,69,.04)}
+.mat-unlocked-msg{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;
+text-transform:uppercase;color:var(--emerald);margin-top:auto;
+display:flex;align-items:center;gap:6px}
+.mat-unlocked-msg::before{content:'✓'}
+
+/* ─── CTA FINAL ─── */
+.cta-sec{padding:140px 64px;background:var(--emerald);
+position:relative;overflow:hidden;text-align:center}
+.cta-sec::before{content:'';position:absolute;inset:0;
+background:radial-gradient(ellipse at center,rgba(45,138,104,.5) 0%,transparent 70%);pointer-events:none}
+.cta-wm{position:absolute;left:50%;bottom:-60px;transform:translateX(-50%);
+font-family:'Syne',sans-serif;font-size:clamp(60px,12vw,160px);font-weight:800;
+color:rgba(18,18,14,.07);white-space:nowrap;pointer-events:none;
+letter-spacing:-5px;user-select:none}
+.cta-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;
+color:rgba(242,239,232,.6);margin-bottom:24px;display:block;position:relative;z-index:1}
+.cta-h2{font-family:'Syne',sans-serif;font-size:clamp(28px,4.5vw,64px);font-weight:800;
+line-height:1.05;letter-spacing:-2.5px;color:var(--cream);
+margin-bottom:20px;position:relative;z-index:1}
+.cta-sub{font-size:16px;font-weight:300;line-height:1.85;
+color:rgba(242,239,232,.75);max-width:480px;margin:0 auto 52px;position:relative;z-index:1}
+.btn-cta{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;letter-spacing:2.5px;
+text-transform:uppercase;color:var(--emerald);background:var(--cream);
+border:none;padding:22px 56px;cursor:pointer;text-decoration:none;
+transition:background .25s,transform .2s,box-shadow .25s;
+display:inline-block;position:relative;z-index:1}
+.btn-cta:hover{background:#fff;transform:translateY(-2px);box-shadow:0 20px 60px rgba(18,18,14,.2)}
+.cta-fine{margin-top:20px;font-family:'DM Mono',monospace;font-size:9px;
+letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.4);
+position:relative;z-index:1}
+
+/* FOOTER */
+footer{background:var(--ink2);border-top:1px solid rgba(255,255,255,.05);
+padding:36px 64px;display:flex;align-items:center;justify-content:space-between}
+.f-logo{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;
+letter-spacing:-.5px;color:rgba(242,239,232,.3);text-decoration:none}
+.f-logo .ai{color:var(--emerald)}
+.f-copy{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(242,239,232,.15)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s ease,transform .8s ease}
+.reveal.v{opacity:1;transform:translateY(0)}
+.reveal-d1{transition-delay:.12s}.reveal-d2{transition-delay:.22s}.reveal-d3{transition-delay:.32s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+
+/* MOBILE */
+@media(max-width:960px){
+  nav{padding:0 24px}
+  .hero{grid-template-columns:1fr;padding:110px 24px 80px;gap:48px}
+  .hero-vline{left:24px}
+  .hero-right{display:none}
+  .prob-grid{grid-template-columns:1fr}
+  .pilares{grid-template-columns:1fr 1fr}
+  .como-steps{grid-template-columns:1fr 1fr}
+  .metodo-intro{grid-template-columns:1fr;gap:20px}
+  .quiz-inner{grid-template-columns:1fr}
+  .mat-grid{grid-template-columns:1fr 1fr}
+  .problema,.metodo,.como,.possib,.quiz-sec,.isca,.cta-sec{padding:80px 24px}
+  footer{flex-direction:column;gap:12px;text-align:center;padding:28px 24px}
+}
+@media(max-width:560px){
+  .pilares,.como-steps,.mat-grid{grid-template-columns:1fr}
+}
+
+/* ── DADOS ANIMADOS ── */
+.dados-sec{padding:80px 64px;background:var(--ink);position:relative;overflow:hidden}
+.dados-sec::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.dados-inner{max-width:1100px;margin:0 auto}
+.dados-header{margin-bottom:56px}
+.dados-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06)}
+.dado-card{background:var(--ink2);padding:44px 36px 36px;position:relative;overflow:hidden;cursor:default;transition:background .35s}
+.dado-card:hover{background:var(--ink3)}
+.dado-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--emerald);transform:scaleY(0);transform-origin:bottom;transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.dado-card:hover::after{transform:scaleY(1)}
+.dado-card.gold-card::after{background:var(--gold2)}
+.dado-ring-wrap{position:relative;width:80px;height:80px;margin-bottom:24px;flex-shrink:0}
+.dado-ring-svg{width:80px;height:80px;transform:rotate(-90deg)}
+.dado-ring-track{fill:none;stroke:rgba(255,255,255,.06);stroke-width:3}
+.dado-ring-fill{fill:none;stroke:var(--emerald);stroke-width:3;stroke-linecap:round;stroke-dasharray:220;stroke-dashoffset:220;transition:stroke-dashoffset 1.4s cubic-bezier(.4,0,.2,1)}
+.dado-card.gold-card .dado-ring-fill{stroke:var(--gold2)}
+.dado-ring-inner{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.dado-ring-num{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;letter-spacing:-.5px;color:var(--cream);line-height:1}
+.dado-card.gold-card .dado-ring-num{color:var(--gold2)}
+.dado-num-big{font-family:'Syne',sans-serif;font-size:clamp(40px,4.5vw,68px);font-weight:800;letter-spacing:-3px;line-height:1;color:var(--emerald);margin-bottom:14px;display:block}
+.dado-card.gold-card .dado-num-big{color:var(--gold2)}
+.dado-frase{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;letter-spacing:-.3px;line-height:1.45;color:rgba(242,239,232,.85);margin-bottom:12px}
+.dado-desc{font-size:13px;font-weight:300;line-height:1.8;color:rgba(242,239,232,.4);max-height:0;overflow:hidden;opacity:0;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .4s ease,margin-bottom .4s}
+.dado-card:hover .dado-desc{max-height:140px;opacity:1;margin-bottom:16px}
+.dado-fonte{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.18);display:flex;align-items:center;gap:8px;opacity:0;transform:translateY(4px);transition:opacity .35s .1s,transform .35s .1s}
+.dado-card:hover .dado-fonte{opacity:1;transform:translateY(0)}
+.dado-fonte::before{content:'';display:inline-block;width:14px;height:1px;background:rgba(242,239,232,.18);flex-shrink:0}
+/* ── PROVA REAL ── */
+.prova-real{padding:64px 64px;background:var(--ink);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden}
+.prova-real::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent)}
+.prova-inner{display:flex;align-items:flex-start;gap:60px;max-width:1100px;margin:0 auto;flex-wrap:wrap}
+.prova-stat{flex-shrink:0;text-align:center;min-width:140px}
+.prova-val{font-family:'Syne',sans-serif;font-size:clamp(44px,6vw,72px);font-weight:800;letter-spacing:-3px;color:var(--gold2);line-height:1}
+.prova-unit{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(242,239,232,.3);margin-top:6px;display:block}
+.prova-sep{width:1px;height:80px;background:rgba(255,255,255,.08);flex-shrink:0}
+.prova-text{flex:1;min-width:240px}
+.prova-quote{font-family:'Syne',sans-serif;font-size:clamp(16px,2.2vw,22px);font-weight:600;letter-spacing:-.5px;line-height:1.45;color:rgba(242,239,232,.88);margin-bottom:16px}
+.prova-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.prova-badge{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--emerald3);border:1px solid var(--e-border);padding:5px 12px;background:rgba(26,92,69,.06)}
+.prova-context{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.28)}
+.prova-market{margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.prova-market-num{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-1px;color:var(--gold2);line-height:1;flex-shrink:0}
+.prova-market-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.35);line-height:1.5}
+/* ── CASES ── */
+.cases-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(255,255,255,.05);margin-top:40px;border:1px solid rgba(255,255,255,.05)}
+.case-item{background:var(--ink2);padding:28px 32px;position:relative;overflow:hidden;transition:background .3s}
+.case-item:hover{background:var(--ink3)}
+.case-item::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--emerald),transparent);opacity:.4}
+.case-nicho{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--emerald3);margin-bottom:10px}
+.case-resultado{font-family:'Syne',sans-serif;font-size:clamp(18px,2.2vw,26px);font-weight:800;letter-spacing:-1px;color:var(--cream);line-height:1.15;margin-bottom:8px}
+.case-resultado em{font-style:normal;color:var(--gold2)}
+.case-meta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.28)}
+/* ── INVEST ── */
+.invest-anchor{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:20px 24px;background:rgba(26,92,69,.08);border:1px solid rgba(26,92,69,.2);margin-top:28px}
+.invest-from{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--emerald3);flex-shrink:0}
+.invest-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-1px;color:var(--cream);flex-shrink:0}
+.invest-sep{width:1px;height:28px;background:rgba(26,92,69,.3);flex-shrink:0}
+.invest-note{font-size:13px;font-weight:300;line-height:1.6;color:rgba(242,239,232,.45)}
+.cta-invest{display:inline-flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;max-width:560px;padding:16px 28px;background:rgba(26,92,69,.12);border:1px solid rgba(26,92,69,.25);margin:0 auto 32px}
+.cta-invest-from{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--emerald3)}
+.cta-invest-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-1px;color:var(--cream)}
+.cta-invest-sep{width:1px;height:24px;background:rgba(26,92,69,.3)}
+.cta-invest-note{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(242,239,232,.35);line-height:1.5;text-align:center}
+/* ── OPP ANCHOR ── */
+.opp-anchor{padding:14px 24px 18px;border-top:1px solid rgba(255,255,255,.05);display:flex;align-items:flex-start;gap:12px}
+.opp-anchor-icon{font-size:14px;flex-shrink:0;margin-top:2px}
+.opp-anchor-text{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.2px;line-height:1.6;color:rgba(242,239,232,.32)}
+.opp-anchor-text strong{color:rgba(242,239,232,.55);font-weight:500}
+/* ── VAGAS ── */
+.vagas-strip{background:rgba(184,146,74,.08);border-top:1px solid rgba(184,146,74,.15);border-bottom:1px solid rgba(184,146,74,.15);padding:12px 64px;display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.vagas-dot{width:7px;height:7px;border-radius:50%;background:var(--gold2);animation:blink 2s ease-in-out infinite;flex-shrink:0}
+.vagas-text{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2)}
+.vagas-text strong{color:var(--cream)}
+.vagas-cta{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);text-decoration:underline;text-underline-offset:3px;transition:color .2s}
+.vagas-cta:hover{color:var(--gold3)}
+/* ── FLOAT CTA ── */
+.float-cta{position:fixed;bottom:0;left:0;right:0;z-index:400;background:rgba(28,28,22,.97);backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.07);padding:14px 64px;display:flex;align-items:center;justify-content:space-between;gap:24px;transform:translateY(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94)}
+.float-cta.visible{transform:translateY(0)}
+.float-cta-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;letter-spacing:-.3px;color:var(--cream)}
+.float-cta-sub{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.3);margin-top:2px}
+.float-vagas{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold2);margin-top:3px}
+.float-cta-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.float-cta-dismiss{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(242,239,232,.3);background:none;border:none;cursor:pointer;transition:color .2s;padding:4px}
+.float-cta-dismiss:hover{color:rgba(242,239,232,.6)}
+.btn-float{font-family:'Syne',sans-serif;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--cream);background:var(--emerald);border:none;padding:11px 24px;cursor:pointer;text-decoration:none;transition:background .25s,transform .2s;display:inline-block;white-space:nowrap}
+.btn-float:hover{background:var(--emerald2);transform:translateY(-1px)}
+/* ── RESPONSIVE ADICIONAL ── */
+@media(max-width:960px){
+  .prova-real{padding:48px 24px}
+  .prova-inner{gap:32px;flex-direction:column;align-items:flex-start}
+  .prova-sep{display:none}
+  .dados-sec{padding:56px 24px}
+  .dados-grid{grid-template-columns:1fr}
+  .dado-card{padding:32px 24px}
+  .dado-desc{max-height:140px;opacity:1;margin-bottom:16px}
+  .dado-fonte{opacity:1;transform:translateY(0)}
+  .cases-grid{grid-template-columns:1fr}
+  .case-item{padding:24px 20px}
+  .vagas-strip{padding:12px 24px;gap:12px}
+  .invest-anchor{flex-direction:column;align-items:flex-start;gap:12px}
+  .invest-sep{display:none}
+  .cta-invest{flex-direction:column;gap:8px;width:100%;max-width:100%}
+  .cta-invest-sep{display:none}
+  .cta-invest-note{text-align:left}
+  .float-cta{padding:12px 24px}
+  .float-cta-sub{display:none}
+  .opp-anchor{padding:12px 18px 14px}
+}
+@media(max-width:560px){
+  .dado-num-big{font-size:clamp(36px,12vw,52px);letter-spacing:-2px}
+  .dado-ring-wrap{width:64px;height:64px}
+  .dado-ring-svg{width:64px;height:64px}
+  .dado-ring-num{font-size:13px}
+  .case-resultado{font-size:clamp(16px,5vw,22px)}
+  .dados-header{margin-bottom:36px}
+  .float-cta{flex-direction:column;align-items:stretch;gap:10px;padding:16px 20px}
+  .float-cta-right{flex-direction:row;justify-content:space-between}
+  .btn-float{flex:1;text-align:center}
+  .vagas-strip{flex-direction:column;text-align:center;gap:8px}
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="logo"><span>Elev</span><span class="ai">AI</span><span class="co">Co</span></a>
+  <a href="index.html" class="nav-back"><span>Outros mercados</span></a>
+  <a href="https://wa.me/5567991613715?text=Ol%C3%A1%2C+Ol%C3%A1%2C+vim+pela+p%C3%A1gina+de+advocacia." class="nav-cta" target="_blank">Falar com especialista</a>
+</nav>
+
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="hero-vline"></div>
+  <div class="hero-wm">VÉRTICE</div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="h-bar"></span>
+      <span class="h-tag">Para escritórios de advocacia</span>
+    </div>
+
+    <div class="metodo-badge">
+      <span class="mb-l">Método</span>
+      <span class="mb-sep"></span>
+      <span class="mb-n">Vértice</span>
+    </div>
+
+    <h1 class="hero-h1">
+      Seu escritório chegou até aqui<br>
+      <em>pela sua competência.</em><br>
+      O próximo nível exige<br>
+      <span class="out">um sistema.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Você já tem clientes. Já tem reputação. Já tem resultado.
+      Mas <strong>crescer além do que a indicação traz exige uma estrutura que trabalha por você</strong> — não apenas quando alguém te recomenda.
+      O Método Vértice é o sistema de captação da ElevAI: analisamos seu escritório e construímos a estrutura completa de posicionamento, autoridade e aquisição de clientes para levar você ao próximo patamar.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="#quiz" class="btn-primary" onclick="document.getElementById('quiz').scrollIntoView({behavior:'smooth'});return false">Quero escalar meu escritório →</a>
+      <span class="hero-note">Diagnóstico gratuito · 3 minutos</span>
+    </div>
+  </div>
+
+  <!-- PAINEL INTERATIVO -->
+  <div class="hero-right">
+    <div class="opp-panel">
+
+      <div class="opp-head">
+        <span class="opp-title">Calculadora de potencial</span>
+        <span class="opp-live"><span class="opp-dot"></span>ao vivo</span>
+      </div>
+
+      <div class="opp-display">
+        <span class="opp-sublabel">Receita adicional estimada / ano</span>
+        <div class="opp-value" id="oppValue">R$ 0</div>
+        <p class="opp-caption">Ajuste os dados do seu escritório<br>e veja o potencial que está sendo deixado na mesa.</p>
+      </div>
+
+      <div class="opp-inputs">
+
+        <div class="opp-field">
+          <div class="opp-field-row">
+            <span class="opp-field-label">Clientes ativos / mês</span>
+            <span class="opp-field-val" id="lblClientes">8</span>
+          </div>
+          <div class="opp-track">
+            <div class="opp-fill" id="fillClientes"></div>
+            <input type="range" class="opp-range" id="slClientes" min="2" max="40" value="8" oninput="calcOpp()">
+          </div>
+        </div>
+
+        <div class="opp-field">
+          <div class="opp-field-row">
+            <span class="opp-field-label">Honorário médio (R$)</span>
+            <span class="opp-field-val" id="lblTicket">3.500</span>
+          </div>
+          <div class="opp-track">
+            <div class="opp-fill" id="fillTicket"></div>
+            <input type="range" class="opp-range" id="slTicket" min="500" max="20000" step="500" value="3500" oninput="calcOpp()">
+          </div>
+        </div>
+
+        <div class="opp-field">
+          <div class="opp-field-row">
+            <span class="opp-field-label">Vem por indicação</span>
+            <span class="opp-field-val" id="lblInd">80%</span>
+          </div>
+          <div class="opp-track">
+            <div class="opp-fill" id="fillInd"></div>
+            <input type="range" class="opp-range" id="slInd" min="20" max="100" step="5" value="80" oninput="calcOpp()">
+          </div>
+        </div>
+
+      </div>
+
+      <div class="opp-breakdown">
+        <div class="opp-brow">
+          <span class="obl">Novos clientes via sistema</span>
+          <span class="obv" id="brkSistema">+2 / mês</span>
+        </div>
+        <div class="opp-brow">
+          <span class="obl">Receita mensal adicional</span>
+          <span class="obv" id="brkMensal">R$ 7.000</span>
+        </div>
+        <div class="opp-brow">
+          <span class="obl">Potencial anual</span>
+          <span class="obv em" id="brkAnual">R$ 84k</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VAGAS STRIP -->
+<div class="vagas-strip">
+  <span class="vagas-dot"></span>
+  <span class="vagas-text"><strong>7 vagas disponíveis</strong> para diagnóstico em abril — 10 por mês, sem exceções</span>
+  <a href="https://wa.me/5567991613715?text=Ol%C3%A1%2C+quero+garantir+uma+das+vagas+do+diagn%C3%B3stico+de+abril." class="vagas-cta" target="_blank">Garantir minha vaga →</a>
+</div>
+<!-- 2. PROBLEMA -->
+<section class="problema">
+  <div class="sec-wm">TETO</div>
+  <div class="sec-tag reveal" style="color:var(--gold2)">
+    <span class="st-line" style="background:var(--gold2)"></span>
+    O teto invisível
+  </div>
+  <h2 class="sec-h2 reveal reveal-d1" style="color:rgba(242,239,232,.92)">
+    Você cresceu até aqui.<br>
+    <em style="color:var(--gold2)">Mas sente que poderia ir além.</em>
+  </h2>
+  <div class="prob-grid reveal reveal-d2">
+    <div class="prob-item">
+      <div class="pi-n">01</div>
+      <div class="pi-t">O crescimento depende de quando alguém te lembra</div>
+      <div class="pi-d">Indicação forte é sinal de bom trabalho — e você tem isso. Mas o problema não é qualidade: é que o fluxo de novos clientes está fora do seu controle. Bons meses e meses mais fracos se alternam sem que você consiga mudar isso.</div>
+    </div>
+    <div class="prob-item">
+      <div class="pi-n">02</div>
+      <div class="pi-t">Seu valor real não chega antes de você</div>
+      <div class="pi-d">Quem já te conhece sabe o que você vale. Quem chega pela primeira vez ainda não sabe. Sem uma presença que comunique autoridade antes do contato, cada novo cliente começa a te avaliar do zero — e alguns decidem pelo preço.</div>
+    </div>
+    <div class="prob-item">
+      <div class="pi-n">03</div>
+      <div class="pi-t">Você está no limite do que consegue fazer sozinho</div>
+      <div class="pi-d">Chegar onde está exigiu muito de você diretamente. Mas crescer além desse ponto exige uma estrutura que funcione independente da sua presença. Sem isso, qualquer expansão significa mais trabalho — não mais resultado.</div>
+    </div>
+    <div class="prob-item">
+      <div class="pi-n">04</div>
+      <div class="pi-t">Escritórios menores estão ocupando espaço que deveria ser seu</div>
+      <div class="pi-d">Com estrutura digital bem construída, um escritório com menos experiência que o seu consegue aparecer antes, parecer maior e fechar clientes que deveriam ter chegado até você. Reputação sem visibilidade não escala.</div>
+    </div>
+  </div>
+  <div class="prob-statement reveal">
+    <p class="ps-text">
+      Você não precisa começar.<br>
+      Você precisa de uma estrutura<br>
+      <em>à altura do que já construiu.</em>
+    </p>
+    <div class="ps-aside">
+      <div class="ps-val">93%</div>
+      <div class="ps-label">dos potenciais clientes pesquisam online antes de contratar um advogado</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROVA REAL -->
+<section class="prova-real">
+  <div class="prova-inner">
+    <div class="prova-stat reveal">
+      <div class="prova-val">22</div>
+      <span class="prova-unit">contatos/mês</span>
+    </div>
+    <div class="prova-sep reveal"></div>
+    <div class="prova-text reveal reveal-d1">
+      <p class="prova-quote">
+        De 6 por indicação para 22 contatos/mês em apenas 60 dias —
+        sem mudar de equipe, sem aumentar horas de trabalho.
+      </p>
+      <div class="prova-meta">
+        <span class="prova-badge">Sitorski Advogados Associados</span>
+        <span class="prova-context">escritório em Campo Grande, MS · 60 dias</span>
+      </div>
+      <div class="prova-market reveal">
+        <div class="prova-market-num">70%</div>
+        <div class="prova-market-label">iniciam busca por advogado
+diretamente pela internet</div>
+      </div>
+      <div class="cases-grid">
+        <div class="case-item reveal">
+          <div class="case-nicho">Advocacia Trabalhista · interior de SP</div>
+          <div class="case-resultado">De 3 para <em>14 contatos/mês</em></div>
+          <div class="case-meta">em 45 dias · sem mudar equipe</div>
+        </div>
+        <div class="case-item reveal">
+          <div class="case-nicho">Escritório de Família · Curitiba, PR</div>
+          <div class="case-resultado">De 5 para <em>19 contatos/mês</em></div>
+          <div class="case-meta">em 60 dias · sem mudar equipe</div>
+        </div>
+      </div>
+      <div class="invest-anchor reveal">
+        <span class="invest-from">Investimento</span>
+        <span class="invest-val">a partir de R$ 997/mês</span>
+        <span class="invest-sep"></span>
+        <span class="invest-note">Valor final definido após diagnóstico gratuito — sem compromisso.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOCO DE DADOS -->
+<section class="dados-sec">
+  <div class="dados-inner">
+    <div class="dados-header">
+      <div class="sec-tag reveal" style="color:var(--emerald3)">
+        <span class="st-line" style="background:var(--emerald3)"></span>
+        Advocacia e mercado digital
+      </div>
+      <h2 class="sec-h2 reveal reveal-d1" style="color:rgba(242,239,232,.92);margin-bottom:12px">O que os números revelam sobre o mercado jurídico.</h2>
+      <p class="reveal reveal-d2" style="font-size:15px;font-weight:300;line-height:1.85;color:rgba(242,239,232,.45);max-width:560px">Dados que explicam por que escritórios bem posicionados digitalmente crescem mais — independente do tamanho.</p>
+    </div>
+    <div class="dados-grid">
+      <div class="dado-card" data-val="93" data-pre="" data-suf="%" data-ring="93" data-delay="0">
+        <div class="dado-ring-wrap">
+          <svg class="dado-ring-svg" viewBox="0 0 80 80">
+            <circle class="dado-ring-track" cx="40" cy="40" r="35"/>
+            <circle class="dado-ring-fill" cx="40" cy="40" r="35"/>
+          </svg>
+          <div class="dado-ring-inner"><span class="dado-ring-num">93%</span></div>
+        </div>
+        <span class="dado-num-big">0%</span>
+        <div class="dado-frase">dos potenciais clientes pesquisam online antes de contratar um advogado</div>
+        <div class="dado-desc">Mesmo quem chega por indicação valida o profissional no Google antes de ligar.</div>
+        <span class="dado-fonte">Pesquisa comportamento do consumidor digital brasileiro</span>
+      </div>
+      <div class="dado-card gold-card" data-val="1300000" data-pre="" data-suf="" data-ring="78" data-delay="180">
+        <div class="dado-ring-wrap">
+          <svg class="dado-ring-svg" viewBox="0 0 80 80">
+            <circle class="dado-ring-track" cx="40" cy="40" r="35"/>
+            <circle class="dado-ring-fill" cx="40" cy="40" r="35"/>
+          </svg>
+          <div class="dado-ring-inner"><span class="dado-ring-num">1M</span></div>
+        </div>
+        <span class="dado-num-big">0</span>
+        <div class="dado-frase">de advogados competindo pelos mesmos clientes no Brasil</div>
+        <div class="dado-desc">Com tanta oferta, quem não comunica diferencial antes do contato compete apenas por preço.</div>
+        <span class="dado-fonte">OAB / FGV — 1º Estudo Demográfico da Advocacia Brasileira</span>
+      </div>
+      <div class="dado-card" data-val="366" data-pre="+" data-suf="%" data-ring="88" data-delay="360">
+        <div class="dado-ring-wrap">
+          <svg class="dado-ring-svg" viewBox="0 0 80 80">
+            <circle class="dado-ring-track" cx="40" cy="40" r="35"/>
+            <circle class="dado-ring-fill" cx="40" cy="40" r="35"/>
+          </svg>
+          <div class="dado-ring-inner"><span class="dado-ring-num">+366%</span></div>
+        </div>
+        <span class="dado-num-big">+0%</span>
+        <div class="dado-frase">de crescimento em contatos qualificados com estrutura digital</div>
+        <div class="dado-desc">Resultado documentado de escritório que implementou sistema integrado de captação em 60 dias.</div>
+        <span class="dado-fonte">Case ElevAI Co — Sitorski Advogados Associados</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. MÉTODO VÉRTICE -->
+<section class="metodo">
+  <div class="metodo-inner">
+    <div class="metodo-intro">
+      <div>
+        <div class="sec-tag reveal" style="color:var(--emerald)">
+          <span class="st-line" style="background:var(--emerald)"></span>
+          Método Vértice
+        </div>
+        <h2 class="sec-h2 reveal reveal-d1">
+          Quatro pilares.<br>
+          <em style="color:var(--emerald)">Um sistema integrado.</em>
+        </h2>
+      </div>
+      <p class="metodo-p reveal reveal-d2">
+        O Método Vértice não é um pacote de serviços. É uma estrutura de crescimento onde cada pilar depende e alimenta o próximo.
+        <strong>Não existe tráfego sem posicionamento. Não existe posicionamento sem diagnóstico. Não existe conversão sem estrutura.</strong>
+        Tudo conectado.
+      </p>
+    </div>
+    <div class="pilares reveal">
+      <div class="pilar">
+        <div class="pilar-n">01</div>
+        <span class="pilar-icon">🔬</span>
+        <div class="pilar-name">Diagnóstico de Posicionamento</div>
+        <div class="pilar-desc">Antes de qualquer ação, entendemos quem é seu cliente ideal, qual é sua proposta real de valor e onde está o gargalo que impede o crescimento.</div>
+      </div>
+      <div class="pilar">
+        <div class="pilar-n">02</div>
+        <span class="pilar-icon">🏛️</span>
+        <div class="pilar-name">Arquitetura de Autoridade</div>
+        <div class="pilar-desc">Construímos a presença certa para o seu perfil. Os canais que fazem sentido para o seu nicho e seu cliente — definidos após o diagnóstico, não antes.</div>
+      </div>
+      <div class="pilar">
+        <div class="pilar-n">03</div>
+        <span class="pilar-icon">⚙️</span>
+        <div class="pilar-name">Sistema de Captação</div>
+        <div class="pilar-desc">O funil de aquisição construído para o seu caso específico. Cada canal e cada peça justificados pela estratégia — não por modismo ou template.</div>
+      </div>
+      <div class="pilar">
+        <div class="pilar-n">04</div>
+        <span class="pilar-icon">🎯</span>
+        <div class="pilar-name">Estrutura de Conversão</div>
+        <div class="pilar-desc">Atrair sem converter é desperdício. Construímos a estrutura que transforma visitante em contato, contato em consulta e consulta em contrato.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. COMO FUNCIONA -->
+<section class="como">
+  <div class="como-inner">
+    <div class="sec-tag reveal" style="color:var(--gold2)">
+      <span class="st-line" style="background:var(--gold2)"></span>
+      Como funciona
+    </div>
+    <h2 class="sec-h2 reveal reveal-d1" style="color:rgba(242,239,232,.92);max-width:520px">
+      Do diagnóstico ao<br>
+      <em style="color:var(--gold2)">primeiro cliente novo.</em>
+    </h2>
+    <div class="como-steps reveal reveal-d2">
+      <div class="cs">
+        <div class="cs-big">01</div>
+        <span class="cs-step">Semana 1</span>
+        <div class="cs-title">Diagnóstico completo</div>
+        <div class="cs-desc">Mapeamos o escritório, o mercado local, os concorrentes e o perfil de cliente ideal. Saímos com uma estratégia personalizada — não um template genérico.</div>
+      </div>
+      <div class="cs">
+        <div class="cs-big">02</div>
+        <span class="cs-step">Semana 2</span>
+        <div class="cs-title">Definição da estrutura</div>
+        <div class="cs-desc">Definimos exatamente quais canais e quais peças fazem sentido para o seu caso. Nada é decidido antes de entender o seu escritório.</div>
+      </div>
+      <div class="cs">
+        <div class="cs-big">03</div>
+        <span class="cs-step">Semanas 3–4</span>
+        <div class="cs-title">Construção e ativação</div>
+        <div class="cs-desc">Construímos tudo e colocamos no ar. Em 72h você já tem a estrutura base funcionando. Os demais canais entram conforme a estratégia.</div>
+      </div>
+      <div class="cs">
+        <div class="cs-big">04</div>
+        <span class="cs-step">Contínuo</span>
+        <div class="cs-title">Otimização e escala</div>
+        <div class="cs-desc">Medimos tudo. Otimizamos semana a semana. Você cresce com dados reais — não com suposições ou achismo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. O QUE PODE SER CONSTRUÍDO -->
+<section class="possib">
+  <div class="possib-inner">
+    <div class="possib-intro">
+      <div class="sec-tag reveal" style="color:var(--emerald)">
+        <span class="st-line" style="background:var(--emerald)"></span>
+        O que pode ser construído
+      </div>
+      <h2 class="sec-h2 reveal reveal-d1" style="margin-bottom:20px">
+        Cada escritório é um caso.<br>
+        <em style="color:var(--emerald)">Cada estrutura é única.</em>
+      </h2>
+      <div class="possib-note reveal reveal-d2">
+        <strong>Importante:</strong> o que será construído para o seu escritório depende do diagnóstico. Abaixo estão as possibilidades — não uma lista de serviços que você precisa contratar todos.
+      </div>
+    </div>
+
+    <div class="possib-acc-list reveal">
+      <div class="possib-acc">
+        <div class="pa-head" onclick="togPA(this)">
+          <span class="pa-n">01</span>
+          <span class="pa-title">Landing page de captação</span>
+          <span class="pa-badge">Conversão</span>
+          <span class="pa-arr">+</span>
+        </div>
+        <div class="pa-body"><div class="pa-inner">
+          <div class="pa-desc">Uma página construída com a linguagem do seu cliente ideal e da sua área de atuação. Cada elemento existe para remover objeções e conduzir ao contato — não para impressionar colegas de profissão.</div>
+          <div class="pa-resultado">Visitante vira contato qualificado</div>
+        </div></div>
+      </div>
+      <div class="possib-acc">
+        <div class="pa-head" onclick="togPA(this)">
+          <span class="pa-n">02</span>
+          <span class="pa-title">Presença orgânica nos buscadores</span>
+          <span class="pa-badge">Visibilidade</span>
+          <span class="pa-arr">+</span>
+        </div>
+        <div class="pa-body"><div class="pa-inner">
+          <div class="pa-desc">SEO local e Google Meu Negócio estruturados para que seu escritório apareça quando as pessoas certas pesquisam. Tráfego qualificado e constante — sem pagar por clique.</div>
+          <div class="pa-resultado">Você aparece para quem já está procurando</div>
+        </div></div>
+      </div>
+      <div class="possib-acc">
+        <div class="pa-head" onclick="togPA(this)">
+          <span class="pa-n">03</span>
+          <span class="pa-title">Funil de tráfego pago estruturado</span>
+          <span class="pa-badge">Captação ativa</span>
+          <span class="pa-arr">+</span>
+        </div>
+        <div class="pa-body"><div class="pa-inner">
+          <div class="pa-desc">Tráfego pago sem estrutura de conversão é dinheiro jogado fora. Quando faz sentido para o seu caso, construímos o funil completo — anúncio, página e acompanhamento — para que cada real investido traga retorno real.</div>
+          <div class="pa-resultado">Investimento com retorno mensurável</div>
+        </div></div>
+      </div>
+      <div class="possib-acc">
+        <div class="pa-head" onclick="togPA(this)">
+          <span class="pa-n">04</span>
+          <span class="pa-title">Construção de autoridade nos canais certos</span>
+          <span class="pa-badge">Posicionamento</span>
+          <span class="pa-arr">+</span>
+        </div>
+        <div class="pa-body"><div class="pa-inner">
+          <div class="pa-desc">Qual canal faz mais sentido para o seu escritório depende do seu nicho, do seu cliente ideal e do seu posicionamento. Isso é definido no diagnóstico — não antes. O que entregamos é a presença que faz o cliente chegar convencido.</div>
+          <div class="pa-resultado">Cliente chega sem precisar ser convencido</div>
+        </div></div>
+      </div>
+      <div class="possib-acc">
+        <div class="pa-head" onclick="togPA(this)">
+          <span class="pa-n">05</span>
+          <span class="pa-title">Posicionamento que protege seu honorário</span>
+          <span class="pa-badge">Valor percebido</span>
+          <span class="pa-arr">+</span>
+        </div>
+        <div class="pa-body"><div class="pa-inner">
+          <div class="pa-desc">Quando o cliente não percebe diferença entre você e outro advogado, ele decide pelo menor preço. Construímos o posicionamento — identidade, copy e proposta de valor — que comunica especialidade antes da primeira conversa.</div>
+          <div class="pa-resultado">Honorário fechado sem negociação</div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. QUIZ -->
+<section class="quiz-sec" id="quiz">
+  <div class="sec-wm">ANÁLISE</div>
+  <div class="quiz-inner">
+    <div class="quiz-left">
+      <div class="sec-tag reveal" style="color:var(--gold2)">
+        <span class="st-line" style="background:var(--gold2)"></span>
+        Diagnóstico gratuito
+      </div>
+      <h2 class="sec-h2 reveal reveal-d1" style="color:rgba(242,239,232,.92);margin-bottom:16px">
+        Vamos entender<br>
+        <em style="color:var(--gold2)">o seu escritório.</em>
+      </h2>
+      <p class="quiz-left-sub reveal reveal-d2">
+        Cinco perguntas sobre como seu escritório está crescendo hoje. Com base nas suas respostas, identificamos onde está o teto do crescimento e o que precisa mudar para chegar ao próximo nível.
+      </p>
+    </div>
+    <div class="reveal reveal-d1">
+      <div class="quiz-wrap" id="quizWrap">
+        <div class="qw-head">
+          <span class="qw-title">Diagnóstico — Método Vértice</span>
+          <span class="qw-step" id="qStepLbl">Etapa 1 de 5</span>
+        </div>
+        <div class="qw-prog"><div class="qw-bar" id="qBar"></div></div>
+        <div class="qw-body" id="qBody">
+          <div id="qs1"><div class="qw-q">Como você descreveria o crescimento do seu escritório nos últimos 12 meses?</div><div class="qw-opts"></div></div>
+          <div id="qs2" style="display:none"><div class="qw-q">Quando um cliente novo chega ao escritório, como ele normalmente te encontrou?</div><div class="qw-opts"></div></div>
+          <div id="qs3" style="display:none"><div class="qw-q">Como você se sente em relação ao perfil dos clientes que chegam hoje?</div><div class="qw-opts"></div></div>
+          <div id="qs4" style="display:none"><div class="qw-q">Se você parar de atender por um mês, o que acontece com o fluxo de novos clientes?</div><div class="qw-opts"></div></div>
+          <div id="qs5" style="display:none"><div class="qw-q">Qual é o principal obstáculo para o escritório chegar ao próximo nível?</div><div class="qw-opts"></div></div>
+        </div>
+        <div class="qw-foot" id="qFoot">
+          <button class="btn-qb" id="qBtnB" style="visibility:hidden" onclick="qBack()">Voltar</button>
+          <button class="btn-qn" id="qBtnN" onclick="qNext()">Avançar →</button>
+        </div>
+        <div class="qw-result" id="qResult">
+          <div class="qr-header">
+            <div class="qr-ring"><div><div class="qr-sv" id="qScore">—</div><div class="qr-sl">score</div></div></div>
+            <div><div class="qr-h" id="qHeadline"></div><div class="qr-s" id="qSub"></div></div>
+          </div>
+          <div class="qr-recs" id="qRecs"></div>
+          <a class="btn-qcta" id="qCta" href="#" target="_blank">Quero o Método Vértice no meu escritório →</a>
+          <button class="btn-qreset" onclick="qReset()">Refazer diagnóstico</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. ISCA -->
+<section class="isca">
+  <div class="isca-inner-full">
+    <div class="sec-tag reveal" style="color:var(--emerald)">
+      <span class="st-line" style="background:var(--emerald)"></span>
+      Biblioteca gratuita
+    </div>
+    <h2 class="sec-h2 reveal reveal-d1" style="max-width:600px;margin-bottom:16px">
+      O conhecimento que faltava<br>
+      <em style="color:var(--emerald)">para ir além do que já construiu.</em>
+    </h2>
+    <p class="reveal reveal-d2" style="font-size:15px;font-weight:300;line-height:1.9;color:var(--muted);max-width:560px;margin-bottom:56px">
+      Quatro materiais práticos sobre captação, posicionamento e escala para escritórios que já têm resultado e querem crescer de forma estruturada.
+      <strong style="color:var(--ink)">O primeiro é liberado agora. Os demais você desbloqueia conforme avança.</strong>
+    </p>
+
+    <div class="mat-grid reveal reveal-d1">
+
+      <!-- CARD 1 — LIBERADO -->
+      <div class="mat-card unlocked">
+        <div class="mat-card-top">
+          <div class="mat-num">01</div>
+          <div class="mat-badge free">Liberado</div>
+        </div>
+        <div class="mat-icon">⚖️</div>
+        <div class="mat-title">Como escalar captação dentro dos limites da OAB sem perder posicionamento</div>
+        <div class="mat-desc">O que a resolução permite, onde estão as oportunidades que a maioria dos escritórios ignora e como construir campanhas que atraem o perfil certo sem comprometer a imagem que você já construiu.</div>
+        <div class="mat-form" id="mat1form">
+          <div class="mat-input-row">
+            <input type="email" class="mat-input" id="mat1email" placeholder="Seu e-mail para receber">
+            <button class="btn-mat" onclick="unlockMat(1)">Quero →</button>
+          </div>
+          <span class="mat-fine" id="mat1msg">Acesso imediato · Sem spam</span>
+        </div>
+      </div>
+
+      <!-- CARD 2 — BLOQUEADO -->
+      <div class="mat-card locked" id="mat2card">
+        <div class="mat-card-top">
+          <div class="mat-num">02</div>
+          <div class="mat-badge locked-badge">🔒 Bloqueado</div>
+        </div>
+        <div class="mat-icon" style="filter:grayscale(1);opacity:.3">🎯</div>
+        <div class="mat-title" style="color:var(--muted)">Como fazer seu valor chegar antes de você — e parar de negociar honorário</div>
+        <div class="mat-desc" style="color:var(--muted2)">O método para construir uma presença que comunica especialidade e autoridade antes do primeiro contato — para que o cliente chegue já convencido do que você cobra.</div>
+        <div class="mat-lock-info">
+          <span class="mat-lock-text">Desbloqueie acessando o material anterior</span>
+        </div>
+      </div>
+
+      <!-- CARD 3 — BLOQUEADO -->
+      <div class="mat-card locked" id="mat3card">
+        <div class="mat-card-top">
+          <div class="mat-num">03</div>
+          <div class="mat-badge locked-badge">🔒 Bloqueado</div>
+        </div>
+        <div class="mat-icon" style="filter:grayscale(1);opacity:.3">📐</div>
+        <div class="mat-title" style="color:var(--muted)">A estrutura de captação certa para o seu nicho jurídico</div>
+        <div class="mat-desc" style="color:var(--muted2)">Trabalhista, tributário, família, empresarial — cada área tem um perfil de cliente e um funil diferente. Entenda qual estrutura faz sentido para o seu caso específico, não um template genérico.</div>
+        <div class="mat-lock-info">
+          <span class="mat-lock-text">Desbloqueie acessando o material 02</span>
+        </div>
+      </div>
+
+      <!-- CARD 4 — BLOQUEADO -->
+      <div class="mat-card locked" id="mat4card">
+        <div class="mat-card-top">
+          <div class="mat-num">04</div>
+          <div class="mat-badge locked-badge">🔒 Bloqueado</div>
+        </div>
+        <div class="mat-icon" style="filter:grayscale(1);opacity:.3">📈</div>
+        <div class="mat-title" style="color:var(--muted)">Como crescer sem trabalhar mais horas — o modelo de escritório que escala</div>
+        <div class="mat-desc" style="color:var(--muted2)">O que separa escritórios que crescem com qualidade de vida dos que crescem apenas aumentando carga. A lógica por trás de uma estrutura que capta, qualifica e converte mesmo quando você não está disponível.</div>
+        <div class="mat-lock-info">
+          <span class="mat-lock-text">Desbloqueie acessando o material 03</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 8. CTA FINAL -->
+<section class="cta-sec">
+  <div class="cta-wm">VÉRTICE</div>
+  <span class="cta-tag">Próximo passo</span>
+  <h2 class="cta-h2">Você já construiu<br>um bom escritório.<br><em>Agora vamos escalar.</em></h2>
+  <p class="cta-sub">Conversa de 30 minutos. Analisamos o que você já tem, identificamos onde está o teto e mostramos exatamente o que o Método Vértice constrói para levar o seu escritório ao próximo patamar.</p>
+  <a href="https://wa.me/5567991613715?text=Ol%C3%A1%2C+quero+conhecer+o+M%C3%A9todo+V%C3%A9rtice+para+escalar+meu+escrit%C3%B3rio." class="btn-cta" target="_blank">Quero escalar meu escritório →</a>
+  <p class="cta-fine">Sem compromisso · Resposta em até 2h</p>
+</section>
+
+<footer>
+  <a href="index.html" class="f-logo">Elev<span class="ai">AI</span> Co</a>
+  <span class="f-copy">© 2025 ElevAI Co — Todos os direitos reservados</span>
+</footer>
+
+<script>
+/* CONTADORES ANIMADOS */
+(function(){
+  function fmt(v,pre,suf){
+    let n;
+    if(v>=1000000) n=(v/1000000).toFixed(1).replace('.',',')+'M';
+    else if(v>=1000) n=Math.round(v).toLocaleString('pt-BR');
+    else n=Math.round(v).toString();
+    return pre+n+suf;
+  }
+  function easeOvershoot(t){const c1=1.5,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)}
+  function animCounter(el,target,pre,suf,dur,delay){
+    setTimeout(()=>{
+      let start=null;
+      function step(ts){
+        if(!start)start=ts;
+        const p=Math.min((ts-start)/dur,1);
+        el.textContent=fmt(Math.max(0,easeOvershoot(p)*target),pre,suf);
+        if(p<1)requestAnimationFrame(step);
+        else el.textContent=fmt(target,pre,suf);
+      }
+      requestAnimationFrame(step);
+    },delay);
+  }
+  function animRing(fill,pct,delay){
+    setTimeout(()=>{fill.style.strokeDashoffset=220-(pct/100)*220;},delay+80);
+  }
+  const seen=new Set();
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting||seen.has(e.target))return;
+      seen.add(e.target);
+      const card=e.target;
+      const numEl=card.querySelector('.dado-num-big');
+      const fill=card.querySelector('.dado-ring-fill');
+      const target=parseFloat(card.dataset.val);
+      const pre=card.dataset.pre||'';
+      const suf=card.dataset.suf||'';
+      const pct=parseFloat(card.dataset.ring)||50;
+      const delay=parseInt(card.dataset.delay)||0;
+      if(numEl&&!isNaN(target))animCounter(numEl,target,pre,suf,1600,delay);
+      if(fill)animRing(fill,pct,delay);
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.dado-card').forEach(c=>obs.observe(c));
+})();
+/* FLOAT BANNER */
+(function(){
+  const banner=document.getElementById('floatCta');
+  if(!banner)return;
+  let dismissed=false,shown=false;
+  window.addEventListener('scroll',()=>{
+    if(dismissed)return;
+    const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight);
+    if(pct>.25&&!shown){shown=true;banner.classList.add('visible');}
+    if(pct<.1&&shown){shown=false;banner.classList.remove('visible');}
+  });
+  window.dismissFloat=function(){dismissed=true;banner.classList.remove('visible');};
+})();
+
+/* NAV */
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>60));
+
+/* REVEAL */
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')}),{threshold:.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* CÁLCULO DE OPORTUNIDADE */
+function fmt(n){
+  if(n>=1000000)return'R$ '+(n/1000000).toFixed(1).replace('.',',')+'M';
+  if(n>=1000)return'R$ '+(n/1000).toFixed(0)+'k';
+  return'R$ '+Math.round(n).toLocaleString('pt-BR');
+}
+
+function updateFill(slId,fillId,min,max){
+  const sl=document.getElementById(slId);
+  const fill=document.getElementById(fillId);
+  if(!sl||!fill)return;
+  const pct=(sl.value-min)/(max-min)*100;
+  fill.style.width=pct+'%';
+}
+
+function calcOpp(){
+  const slC=document.getElementById('slClientes');
+  const slT=document.getElementById('slTicket');
+  const slI=document.getElementById('slInd');
+  if(!slC||!slT||!slI)return;
+
+  const clientes=parseInt(slC.value);
+  const ticket=parseInt(slT.value);
+  const ind=parseInt(slI.value);
+
+  document.getElementById('lblClientes').textContent=clientes;
+  document.getElementById('lblTicket').textContent=ticket.toLocaleString('pt-BR');
+  document.getElementById('lblInd').textContent=ind+'%';
+
+  updateFill('slClientes','fillClientes',2,40);
+  updateFill('slTicket','fillTicket',500,20000);
+  updateFill('slInd','fillInd',20,100);
+
+  const fator=0.28*(ind/100);
+  const extras=Math.max(1,Math.round(clientes*fator));
+  const mensal=extras*ticket;
+  const anual=mensal*12;
+
+  animVal('oppValue',anual);
+
+  const v=document.getElementById('oppValue');
+  if(v){v.classList.add('active');clearTimeout(v._t);v._t=setTimeout(()=>v.classList.remove('active'),600);}
+
+  document.getElementById('brkSistema').textContent='+'+extras+' / mês';
+  document.getElementById('brkMensal').textContent=fmt(mensal);
+  document.getElementById('brkAnual').textContent=fmt(anual);
+}
+
+let animFrame=null;
+function animVal(id,target){
+  const el=document.getElementById(id);
+  if(!el)return;
+  if(animFrame)cancelAnimationFrame(animFrame);
+  let start=null;
+  const dur=600;
+  const from=parseFloat(el.dataset.current||0)||0;
+  el.dataset.current=target;
+  function step(ts){
+    if(!start)start=ts;
+    const p=Math.min((ts-start)/dur,1);
+    const ease=1-Math.pow(1-p,3);
+    el.textContent=fmt(from+(target-from)*ease);
+    if(p<1)animFrame=requestAnimationFrame(step);
+  }
+  animFrame=requestAnimationFrame(step);
+}
+
+/* inicializa fills e valor */
+setTimeout(()=>{
+  updateFill('slClientes','fillClientes',2,40);
+  updateFill('slTicket','fillTicket',500,20000);
+  updateFill('slInd','fillInd',20,100);
+  calcOpp();
+},100);
+
+/* ACCORDIONS */
+function togPA(h){
+  const it=h.closest('.possib-acc'),op=it.classList.contains('open');
+  document.querySelectorAll('.possib-acc.open').forEach(i=>i.classList.remove('open'));
+  if(!op)it.classList.add('open');
+}
+
+/* QUIZ */
+const ans={};let step=1;const TOTAL=5;
+const qs=[
+  {q:'Como você descreveria o crescimento do seu escritório nos últimos 12 meses?',opts:[
+    {v:'indicacao',l:'Cresceu, principalmente pelas indicações que chegaram'},
+    {v:'inconsistente',l:'Cresceu, mas de forma irregular — alguns meses muito bons, outros fracos'},
+    {v:'estagnado',l:'Estabilizou em um patamar e não avançou muito'},
+    {v:'estruturado',l:'Cresceu com alguma estrutura além da indicação'}]},
+  {q:'Quando um cliente novo chega ao escritório, como ele normalmente te encontrou?',opts:[
+    {v:'indicacao',l:'Quase sempre por indicação de alguém que já me conhece'},
+    {v:'misto',l:'Indicação na maioria, mas às vezes por outros caminhos'},
+    {v:'variado',l:'Já vejo chegadas por caminhos diferentes sem clareza de onde'}]},
+  {q:'Como você se sente em relação ao perfil dos clientes que chegam hoje?',opts:[
+    {v:'bom',l:'Bom — a maioria tem o perfil que quero atender'},
+    {v:'parcial',l:'Razoável — aceito alguns que não são o ideal para não perder caixa'},
+    {v:'seletivo',l:'Tenho sido cada vez mais seletivo e quero continuar assim'},
+    {v:'expansao',l:'Quero expandir para um perfil de cliente de maior valor'}]},
+  {q:'Se você parar de atender por um mês, o que acontece com o fluxo de novos clientes?',opts:[
+    {v:'para',l:'Praticamente para — tudo depende da minha presença ativa'},
+    {v:'diminui',l:'Diminui muito — tenho pouca estrutura que funcione sem mim'},
+    {v:'mantém',l:'Mantém razoavelmente — tenho algo rodando mas poderia ser mais'},
+    {v:'funciona',l:'Funciona bem — já tenho estrutura que independe de mim'}]},
+  {q:'Qual é o principal obstáculo para o escritório chegar ao próximo nível?',opts:[
+    {v:'visibilidade',l:'Não apareço o suficiente para quem ainda não me conhece'},
+    {v:'posicionamento',l:'Não consigo comunicar meu diferencial antes do primeiro contato'},
+    {v:'escala',l:'Não consigo crescer sem que isso exija mais horas minhas'},
+    {v:'previsibilidade',l:'Não tenho previsibilidade — não sei quanto vou fechar no próximo mês'}]}
+];
+
+function buildQ(n){
+  const el=document.getElementById('qs'+n);
+  if(!el)return;
+  const wrap=el.querySelector('.qw-opts');
+  wrap.innerHTML='';
+  qs[n-1].opts.forEach(o=>{
+    const b=document.createElement('button');
+    b.className='qw-opt'+(ans[n]===o.v?' sel':'');
+    b.textContent=o.l;
+    b.onclick=()=>{wrap.querySelectorAll('.qw-opt').forEach(x=>x.classList.remove('sel'));b.classList.add('sel');ans[n]=o.v;syncBtn()};
+    wrap.appendChild(b);
+  });
+}
+
+function syncBtn(){
+  const b=document.getElementById('qBtnN');
+  const on=!!ans[step];
+  b.classList.toggle('on',on);
+  b.textContent=step===TOTAL&&on?'Ver meu diagnóstico →':'Avançar →';
+}
+
+function showStep(n){
+  for(let i=1;i<=TOTAL;i++){const el=document.getElementById('qs'+i);if(el)el.style.display=i===n?'block':'none';}
+  document.getElementById('qBar').style.width=((n-1)/TOTAL*100)+'%';
+  document.getElementById('qStepLbl').textContent='Etapa '+n+' de '+TOTAL;
+  document.getElementById('qBtnB').style.visibility=n>1?'visible':'hidden';
+  buildQ(n);syncBtn();
+}
+
+function qNext(){if(!ans[step])return;if(step<TOTAL){step++;showStep(step);}else showResult();}
+function qBack(){if(step>1){step--;showStep(step);}}
+
+function showResult(){
+  document.getElementById('qBody').style.display='none';
+  document.getElementById('qFoot').style.display='none';
+  document.getElementById('qBar').style.width='100%';
+  document.getElementById('qStepLbl').textContent='Diagnóstico pronto';
+
+  const a1=ans[1],a2=ans[2],a3=ans[3],a4=ans[4],a5=ans[5];
+
+  /* score de maturidade de sistema — não de tamanho */
+  const s1={indicacao:3,inconsistente:4,estagnado:2,estruturado:8}[a1]||3;
+  const s2={indicacao:2,misto:5,variado:4}[a2]||3;
+  const s3={parcial:3,bom:5,seletivo:7,expansao:8}[a3]||4;
+  const s4={para:1,diminui:3,mantém:6,funciona:9}[a4]||3;
+  const s5={visibilidade:3,posicionamento:5,escala:6,previsibilidade:4}[a5]||4;
+  const score=Math.min(10,Math.round((s1+s2+s3+s4+s5)/5));
+
+  const tier=score<=4?'base':score<=7?'crescimento':'escala';
+  const heads={
+    base:'Você tem um bom escritório — mas ainda sem sistema que escale.',
+    crescimento:'Você está crescendo, mas o próximo nível exige uma estrutura diferente.',
+    escala:'Você já tem estrutura. O próximo passo é integrar e escalar com previsibilidade.'
+  };
+  const subs={
+    base:'O que trouxe até aqui foi competência e boa reputação. O que leva ao próximo nível é um sistema que trabalha por você — mesmo quando você está atendendo.',
+    crescimento:'Você já sente que há mais potencial do que está aproveitando. Falta a estrutura que transforma esse potencial em crescimento constante e previsível.',
+    escala:'Você já avançou bastante. O Método Vértice vai identificar onde sua estrutura atual pode ser otimizada e o que falta para chegar ao próximo patamar.'
+  };
+
+  document.getElementById('qScore').textContent=score;
+  document.getElementById('qHeadline').textContent=heads[tier];
+  document.getElementById('qSub').textContent=subs[tier];
+
+  const recs=[];
+  if(a1==='indicacao'||a1==='inconsistente')recs.push({t:'Sistema de captação ativo',d:'Crescer além da indicação exige um canal que funcione com ou sem recomendação.'});
+  if(a2==='indicacao')recs.push({t:'Diversificação de origem de clientes',d:'Depender de um único canal de aquisição é o maior risco de teto para qualquer escritório.'});
+  if(a3==='parcial')recs.push({t:'Posicionamento que atrai o perfil certo',d:'Quem tem o posicionamento certo escolhe os casos que quer — não aceita o que aparece.'});
+  if(a3==='expansao')recs.push({t:'Reposicionamento para ticket mais alto',d:'Subir de perfil de cliente exige que sua presença comunique um nível diferente antes do contato.'});
+  if(a4==='para'||a4==='diminui')recs.push({t:'Estrutura independente da sua presença',d:'Um sistema bem construído capta, qualifica e converte mesmo quando você não está disponível.'});
+  if(a5==='visibilidade')recs.push({t:'Ampliação de alcance qualificado',d:'Estar presente para quem ainda não te conhece é o que transforma reputação em crescimento.'});
+  if(a5==='posicionamento')recs.push({t:'Autoridade percebida antes do primeiro contato',d:'Quando o cliente já chega convencido, a conversa começa em outro patamar.'});
+  if(a5==='escala')recs.push({t:'Alavancagem sem aumento de horas',d:'Crescer sem trabalhar mais exige estrutura — não só esforço.'});
+  if(a5==='previsibilidade')recs.push({t:'Sistema com métricas de crescimento',d:'Previsibilidade de receita vem de estrutura mensurável — não de esperança.'});
+
+  const list=document.getElementById('qRecs');
+  list.innerHTML='';
+  recs.slice(0,3).forEach(r=>{
+    list.innerHTML+=`<div class="qr-rec"><span class="qr-dot"></span><div class="qr-txt"><strong>${r.t}</strong> — ${r.d}</div></div>`;
+  });
+
+  const waText=`Olá, fiz o diagnóstico da ElevAI. Score: ${score}/10. Principal obstáculo: ${a5}. Quero entender como o Método Vértice se aplica ao meu escritório.`;
+  document.getElementById('qCta').href='https://wa.me/5567991613715?text='+encodeURIComponent(waText);
+  document.getElementById('qResult').style.display='block';
+}
+
+function qReset(){
+  Object.keys(ans).forEach(k=>delete ans[k]);
+  step=1;
+  document.getElementById('qResult').style.display='none';
+  document.getElementById('qBody').style.display='block';
+  document.getElementById('qFoot').style.display='flex';
+  showStep(1);
+}
+
+showStep(1);
+
+/* DESBLOQUEIO DE MATERIAIS */
+const matUnlocked={1:false,2:false,3:false,4:false};
+
+function unlockMat(n){
+  const email=document.getElementById('mat'+n+'email').value.trim();
+  const msg=document.getElementById('mat'+n+'msg');
+  if(!email||!email.includes('@')){
+    msg.textContent='Digite um e-mail válido.';
+    msg.style.color='#c0392b';
+    return;
+  }
+  /* marca como desbloqueado */
+  matUnlocked[n]=true;
+  msg.textContent='✓ Enviado! Verifique sua caixa de entrada.';
+  msg.style.color='var(--emerald3)';
+  document.getElementById('mat'+n+'email').value='';
+
+  /* desbloqueia o próximo card */
+  const next=n+1;
+  if(next<=4){
+    setTimeout(()=>activateCard(next),800);
+  }
+}
+
+function activateCard(n){
+  const card=document.getElementById('mat'+n+'card');
+  if(!card)return;
+  card.classList.remove('locked');
+  card.classList.add('unlocked','just-unlocked');
+
+  /* restaura ícone e texto */
+  const icon=card.querySelector('.mat-icon');
+  if(icon){icon.style.filter='';icon.style.opacity='';}
+  const title=card.querySelector('.mat-title');
+  if(title)title.style.color='';
+  const desc=card.querySelector('.mat-desc');
+  if(desc)desc.style.color='';
+
+  /* troca badge */
+  const badge=card.querySelector('.mat-badge');
+  if(badge){badge.className='mat-badge free';badge.textContent='Desbloqueado';}
+
+  /* troca lock info por form */
+  const lockInfo=card.querySelector('.mat-lock-info');
+  if(lockInfo){
+    lockInfo.outerHTML=`
+      <div class="mat-form" id="mat${n}form">
+        <div class="mat-input-row">
+          <input type="email" class="mat-input" id="mat${n}email" placeholder="Seu e-mail para receber">
+          <button class="btn-mat" onclick="unlockMat(${n})">Quero →</button>
+        </div>
+        <span class="mat-fine" id="mat${n}msg">Acesso imediato · Sem spam</span>
+      </div>`;
+  }
+
+  /* scroll suave até o card */
+  setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'center'}),100);
+}
+</script>
+<!-- BANNER FLUTUANTE -->
+<div class="float-cta" id="floatCta">
+  <div class="float-cta-left">
+    <div class="float-cta-title">Método Vértice — ElevAI Co</div>
+    <div class="float-cta-sub">Diagnóstico gratuito · Sem compromisso</div>
+    <div class="float-vagas">⚡ 7 vagas restantes em abril</div>
+  </div>
+  <div class="float-cta-right">
+    <button class="float-cta-dismiss" onclick="dismissFloat()">✕ fechar</button>
+    <a href="https://wa.me/5567991613715?text=Ol%C3%A1%2C+quero+garantir+uma+das+vagas+do+diagn%C3%B3stico+de+abril." class="btn-float" target="_blank">Quero meu diagnóstico →</a>
+  </div>
+</div>
+</body>
+</html>
